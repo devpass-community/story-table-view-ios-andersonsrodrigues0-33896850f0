@@ -5,6 +5,8 @@ final class MainView: UIView {
     lazy var tableView: UITableView = {
        
         let view = UITableView()
+        view.dataSource = self
+        view.register(UITableViewCell.self, forCellReuseIdentifier: "itemRow")
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -56,5 +58,21 @@ private extension MainView {
             tableView.trailingAnchor.constraint(equalTo: trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
+    }
+}
+
+extension MainView: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        items.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "itemRow") else {
+            fatalError()
+        }
+        
+        cell.textLabel?.text = items[indexPath.row]
+        
+        return cell
     }
 }
